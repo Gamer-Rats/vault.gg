@@ -6,8 +6,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #cdfafa;
+    color: #010a13;
 }
 
 header {
@@ -40,7 +40,6 @@ nav ul li a {
     color: #fff;
     text-decoration: none;
     font-size: 1.2em;
-    border: #091428 2px solid transparent;
     padding: 5px 10px;
     position: relative;
 }
@@ -75,27 +74,41 @@ main {
 }
 
 #welcome h2 {
-    font-size: 2em;
+    font-size: 3.5em;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 50px;
     margin-bottom: 10px;
+    text-align: left;
+    word-wrap: break-word;
+    max-width: 20ch; 
 }
 
 #welcome p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
+    font-size: 1.3em;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    margin-bottom: 50px;
+    text-align: left;
 }
 
 #browse-button {
-    background-color: #c89b3c;
-    color: #fff;
+    background-color: #091428;
+    color: #c89b3c;
     border: none;
     padding: 10px 20px;
     font-size: 1.2em;
     cursor: pointer;
     border-radius: 5px;
+    display: block;
+    margin-left: 20px;
 }
 
 #browse-button:hover {
-    background-color: #b78a2d;
+    background-color: #c89b3c;
+    color: #091428;
+    font-weight: bold;
 }
 
 footer {
