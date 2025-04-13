@@ -75,7 +75,7 @@ main{
 
 #master{
     flex-grow: 1;
-    background-color: white;
+    background-color: #cdfafa;
     height: 100%;
     max-height: 100%;
     overflow-y: scroll;
@@ -95,7 +95,7 @@ input[placeholder="Search for a Item"]{
 #searchButton{
     width: 25%;
     padding: 12px;
-    background-color: black;
+    background-color: #091428;
     color: white;
     border: none;
     border-radius: 5px;
@@ -107,11 +107,12 @@ input[placeholder="Search for a Item"]{
 }
 
 #searchButton:hover{
-    border: 2px solid black;
+    border: 2px solid #091428;
+    background-color: #c8aa6e;
     border-radius: 5px;
     background-color: white;
     font-weight: bold;
-    color: black;
+    color: #091428;
 }
 
 #detail{
@@ -119,6 +120,7 @@ input[placeholder="Search for a Item"]{
     height: 100%;
     text-align: center;
     padding: 20px;
+    background-color: white;
 }
 
 li{
