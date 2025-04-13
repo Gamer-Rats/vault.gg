@@ -69,6 +69,8 @@ main{
     flex-direction: row;
     padding: 15px;
     flex-grow: 10;
+    background: url(bg-img.jpg);
+    background-size: cover;
 }
 
 #master{
@@ -117,7 +119,6 @@ input[placeholder="Search for a Item"]{
     height: 100%;
     text-align: center;
     padding: 20px;
-    background-color: white;
 }
 
 li{

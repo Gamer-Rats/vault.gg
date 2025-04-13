@@ -4,31 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>League of Legends Item Catalogue</title>
-    <link rel="stylesheet" href="homestyle.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header>
         <nav>
-            <ul>
+            <div class="logo">
+                <h1>LOLoadout</h1>
+            </div>
+            <ul class="nav-links">
                 <li><a href="home.html">Home</a></li>
-                <li><a href="items.html">Items</a></li>
+                <li><a href="items.html">Catalogue</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
-                <li><a href="login.html">Login</a></li>
             </ul>
+            <div class="login">
+                <a href="login.html">Login</a>
+            </div>
         </nav>
     </header>
 
-    <main>
-        <section id="welcome">
-            <h2>Welcome to the League of Legends Item Catalogue!</h2>
-            <p>Explore the items available in League of Legends by RIOT Games.</p>
+    <main class="home">
+        <section class="hero">
+            <div class="welcome">
+                <h2>Find and bookmark items from <span id="beaufort">League of Legends</span>.</h2>
+                <p>A meticulously crafted catalogue featuring every item in the game and their details.</p>
+                <div class="browse">
+                    <a href="items.html">Browse Catalogue</a>
+                </div>
+            </div>
+            <div class="lol-logo">
+                <img src="lol-logo.png" height="400px">
+            </div>
         </section>
-
-        <button id="browse-button" onclick="location.href='items.html'">Browse Items</button>
     </main>
 
-    <footer>
+    <footer class="footer-home">
         <p>&copy; 2025 League of Legends Item Catalogue. GamerRats. All rights reserved.</p>
     </footer>
     
