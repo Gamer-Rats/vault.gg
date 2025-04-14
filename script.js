@@ -154,7 +154,7 @@ function renderSavedItems() {
                 <div class="saved-item">
                     <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}">
                     <p>${item.gold.base}</p>
-                    <button class="remove-button" onclick="removeFavorite('${name}')">X</button>
+                    <img src="images/x_button.png" alt="Remove" class="remove-button" onclick="removeFavorite('${name}')">
                 </div>
             `;
         }

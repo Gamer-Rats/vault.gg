@@ -330,27 +330,13 @@ nav a:hover {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #1c232e; /* Dark blue-gray background */
-    color: #c8aa6e; /* Light gold color for the "X" */
-    border: 2px solid #c8aa6e; /* Light gold border */
-    border-radius: 50%; /* Circular button */
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-    font-weight: bold;
+    width: 50px !important; /* Force the width */
+    height: 50px !important; /* Force the height */
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 8px rgba(200, 170, 110, 0.5); /* Subtle gold glow */
-}
-
-.remove-button:hover {
-    background-color: #c8aa6e; /* Light gold background on hover */
-    color: #1c232e; /* Dark blue-gray "X" on hover */
-    border-color: #e0c080; /* Brighter gold border on hover */
-    transform: scale(1.1); /* Slightly enlarge on hover */
-    box-shadow: 0 0 12px rgba(224, 192, 128, 0.8); /* Brighter glow on hover */
+    transition: transform 0.3s ease;
+    object-fit: contain; /* Ensure the image fits within the dimensions */
+    background: none; /* Remove any background that might be applied */
+    border: none; /* Remove any border that might be applied */
+    padding: 0; /* Remove any padding */
 }
 
