@@ -36,10 +36,25 @@ function selectWithDetails(name){
     if(data){
         html = `
             <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
-            <p><strong>Name: </strong>${data.name}</p>
-            <p><strong>Description: </strong>${data.description}</p>
-            <p><strong>Skill: </strong>${data.plaintext || 'N/A'}</p>
-            <p><strong>Price: </strong>${data.gold.base}</p>
+            <p><strong>${data.name}</strong></p>
+            <p>${data.tags.join(', ')}</p>
+            <p>${data.plaintext || 'N/A'}</p>
+            <p><strong>Gold</strong></p>
+            <p>Purchase Value | ${data.gold.base}</p>
+            <p>Sell Value | ${data.gold.sell}</p>
+            <p><strong>Availability</strong></p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                ${Object.keys(data.maps)
+                .filter(mapId => data.maps[mapId])
+                .map(mapId => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/map/map${mapId}.png" alt="Map ${mapId}" style="width: 50px; height: 50px;">`)
+                .join('')}
+            </div>
+            <p><strong>Upgrades</strong></p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                ${data.into
+                .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
+                .join('')}
+            </div>
         `;
     }else{
         html = '<p>Item not found</p>';
