@@ -56,22 +56,18 @@ function selectWithDetails(name) {
     let result = document.querySelector('#detail');
     let html = '';
     let data = findRecord(name);
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-    console.log('Favorites:', favorites);
-    console.log('State:', state);
 
     if (data) {
-        const isFavorited = favorites.includes(name);
         html = `
             <div class="item-detail-container">
                 <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
                 <div class="item-header">
                     <h2>${data.name}</h2>
-                    <span class="save-ribbon ${isFavorited ? 'favorited' : ''}" data-name="${name}" onclick="saveItem('${name}')">
+                    <span class="save-ribbon" onclick="saveItem('${name}')">
                         <i class="fa-solid fa-bookmark"></i>
                     </span>
                 </div>
+                <p class="item-tags">${data.tags.join(', ') || 'No tags available'}</p>
                 <p>${data.plaintext || 'N/A'}</p>
                 <p><strong>Gold</strong></p>
                 <p>Purchase Value | ${data.gold.base}</p>
