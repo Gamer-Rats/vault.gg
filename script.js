@@ -53,23 +53,20 @@ function findRecord(name){
 }
 
 function selectWithDetails(name) {
-    const result = document.querySelector('#detail');
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const data = findRecord(name); // Find the item record by name
+    let result = document.querySelector('#detail');
+    let html = '';
+    let data = findRecord(name);
 
     if (data) {
-        const isFavorited = favorites.includes(name); // Check if the item is favorited
-        const favoritedClass = isFavorited ? 'favorited' : ''; // Add the 'favorited' class if true
-
-        const html = `
+        html = `
             <div class="item-detail-container">
+                <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
                 <div class="item-header">
                     <h2>${data.name}</h2>
-                    <span class="save-ribbon ${favoritedClass}" data-name="${name}" onclick="saveItem('${name}')">
+                    <span class="save-ribbon" onclick="saveItem('${name}')">
                         <i class="fa-solid fa-bookmark"></i>
                     </span>
                 </div>
-                <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
                 <p class="item-tags">${data.tags.join(', ') || 'No tags available'}</p>
                 <p>${data.plaintext || 'N/A'}</p>
                 <p><strong>Gold</strong></p>
@@ -78,25 +75,25 @@ function selectWithDetails(name) {
                 <p><strong>Availability</strong></p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     ${Object.keys(data.maps)
-                        .filter(mapId => data.maps[mapId])
-                        .map(mapId => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/map/map${mapId}.png" alt="Map ${mapId}" style="width: 50px; height: 50px;">`)
-                        .join('')}
+                    .filter(mapId => data.maps[mapId])
+                    .map(mapId => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/map/map${mapId}.png" alt="Map ${mapId}" style="width: 50px; height: 50px;">`)
+                    .join('')}
                 </div>
                 <p><strong>Upgrades</strong></p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     ${data.into
-                        ? data.into
-                            .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
-                            .join('')
-                        : '<p>No upgrades available</p>'}
+                    ? data.into
+                        .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
+                        .join('')
+                    : '<p>No upgrades available</p>'}
                 </div>
             </div>
         `;
-
-        result.innerHTML = html;
     } else {
-        result.innerHTML = '<p>Item not found</p>';
+        html = '<p>Item not found</p>';
     }
+
+    result.innerHTML = html;
 }
 
 function search(){
@@ -124,17 +121,15 @@ function saveItem(name) {
     const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);
 
     if (!favorites.includes(name)) {
-        // Add to favorites
         favorites.push(name);
         localStorage.setItem('favorites', JSON.stringify(favorites));
         alert(`${name} has been added to your favorites!`);
-        if (ribbon) ribbon.classList.add('favorited'); // Add the 'favorited' class
+        if (ribbon) ribbon.classList.add('favorited');
     } else {
-        // Remove from favorites
         favorites = favorites.filter(item => item !== name);
         localStorage.setItem('favorites', JSON.stringify(favorites));
         alert(`${name} has been removed from your favorites.`);
-        if (ribbon) ribbon.classList.remove('favorited'); // Remove the 'favorited' class
+        if (ribbon) ribbon.classList.remove('favorited');
     }
 
     console.log('Saved item name:', name);
