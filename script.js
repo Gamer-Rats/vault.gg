@@ -1,11 +1,13 @@
 let state = [];
 
-function renderList(records){
+function renderList(records) {
     let html = '';
     let result = document.querySelector('#list');
 
-    for(let rec of records){
-        html += `<li><a href="#" onclick="selectWithDetails('${rec.name}')">${rec.name}</a></li>`;
+    for (let rec of records) {
+        // Escape single quotes in the item name
+        const safeName = rec.name.replace(/'/g, "\\'");
+        html += `<li><a href="#" onclick="selectWithDetails('${safeName}')">${rec.name}</a></li>`;
     }
 
     result.innerHTML = html;
@@ -19,12 +21,11 @@ async function getData(){
 }
 
 function findRecord(name){
-    for(let rec of state){
-        if(rec.name === name){
+    for (let rec of state) {
+        if (rec.name.trim().toLowerCase() === name.trim().toLowerCase()) {
             return rec;
         }
     }
-
     return null;
 }
 
