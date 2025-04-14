@@ -257,6 +257,13 @@ nav a:hover {
     color: #f39c12; /* Highlight color on hover */
 }
 
+.item-tags {
+    font-size: 1rem;
+    color: #947034; /* Gold color for tags */
+    margin: 5px 0;
+    font-weight: bold;
+}
+
 function saveItem(name) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);

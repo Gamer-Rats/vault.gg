@@ -44,6 +44,7 @@ function selectWithDetails(name) {
                         <i class="fa-solid fa-bookmark"></i>
                     </span>
                 </div>
+                <p class="item-tags">${data.tags.join(', ') || 'No tags available'}</p>
                 <p>${data.plaintext || 'N/A'}</p>
                 <p><strong>Gold</strong></p>
                 <p>Purchase Value | ${data.gold.base}</p>
