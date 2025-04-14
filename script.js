@@ -28,12 +28,12 @@ function findRecord(name){
     return null;
 }
 
-function selectWithDetails(name){
+function selectWithDetails(name) {
     let result = document.querySelector('#detail');
     let html = '';
     let data = findRecord(name);
 
-    if(data){
+    if (data) {
         html = `
             <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
             <p><strong>${data.name}</strong></p>
@@ -52,11 +52,13 @@ function selectWithDetails(name){
             <p><strong>Upgrades</strong></p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 ${data.into
-                .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
-                .join('')}
+                ? data.into
+                    .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
+                    .join('')
+                : '<p>No upgrades available</p>'}
             </div>
         `;
-    }else{
+    } else {
         html = '<p>Item not found</p>';
     }
 
