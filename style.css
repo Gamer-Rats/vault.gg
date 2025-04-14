@@ -151,15 +151,78 @@ nav a:hover {
     flex-grow: 10;
 }
 
-#master{
-    flex-grow: 1;
-    background-color: #06242f;
-    height: 100%;
-    max-height: 100%;
-    padding: 1em;
-    height: 85vh;
+/* Style for the #master section */
+#master {
+    background-color: #0d1b2a; /* Matches the dark background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    width: 300px; /* Adjust width to match the design */
+}
+
+/* Style for the search bar */
+#master .search {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    background-color: #1b263b; /* Matches the search bar background */
+    border-radius: 5px;
+    padding: 5px 10px;
+    position: relative;
+}
+
+#master .search input[type="search"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    padding: 10px;
+}
+
+#master .search button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for the item list */
+#master #list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #1b263b; /* Matches the list background */
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#master #list li {
+    border-bottom: 1px solid #324a5e;
+}
+
+#master #list li:last-child {
+    border-bottom: none;
+}
+
+#master #list li a {
+    display: block;
+    padding: 10px 15px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+#master #list li a:hover,
+#master #list li a.active {
+    background-color: #415a77; /* Highlight color for active or hovered items */
+    color: #fff;
 }
 
 #searchKey{
