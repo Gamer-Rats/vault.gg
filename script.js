@@ -27,6 +27,20 @@ function renderList(records) {
     }
 
     result.innerHTML = html;
+
+    // Select all list item links
+    const listItems = document.querySelectorAll('#master #list li a');
+
+    // Add click event listener to each item
+    listItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove 'active' class from all items
+            listItems.forEach(link => link.classList.remove('active'));
+            
+            // Add 'active' class to the clicked item
+            item.classList.add('active');
+        });
+    });
 }
 
 function findRecord(name){
