@@ -144,16 +144,22 @@ function renderSavedItems() {
                 <div class="saved-item">
                     <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}">
                     <p>${item.gold.base}</p>
+                    <button class="remove-button" onclick="removeFavorite('${name}')">X</button>
                 </div>
             `;
         }
     }
 
-    if (html === '') {
-        savedItemsContainer.innerHTML = '<p>No saved items found.</p>';
-    } else {
-        savedItemsContainer.innerHTML = html;
-    }
+    savedItemsContainer.innerHTML = html;
+}
+
+function removeFavorite(name) {
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    favorites = favorites.filter(item => item !== name); // Remove the item
+    localStorage.setItem('favorites', JSON.stringify(favorites)); // Update localStorage
+
+    // Re-render the saved items list
+    renderSavedItems();
 }
 
 getData();

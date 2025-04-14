@@ -290,6 +290,7 @@ nav a:hover {
 }
 
 .saved-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -315,5 +316,33 @@ nav a:hover {
 .saved-item:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #1c232e; /* Dark blue-gray background */
+    color: #c8aa6e; /* Light gold color for the "X" */
+    border: 2px solid #c8aa6e; /* Light gold border */
+    border-radius: 50%; /* Circular button */
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(200, 170, 110, 0.5); /* Subtle gold glow */
+}
+
+.remove-button:hover {
+    background-color: #c8aa6e; /* Light gold background on hover */
+    color: #1c232e; /* Dark blue-gray "X" on hover */
+    border-color: #e0c080; /* Brighter gold border on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+    box-shadow: 0 0 12px rgba(224, 192, 128, 0.8); /* Brighter glow on hover */
 }
 
