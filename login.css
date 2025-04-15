@@ -12,13 +12,21 @@
     padding: 0;
 }
 
+/* General styling */
 body {
+    font-family: 'Poppins', sans-serif;
     background-image: url("images/bg-img.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
-    color: #c5c0ab;
 }
 
 .logo h1 {
@@ -27,20 +35,41 @@ body {
     color: #c5c0ab;
 }
 
+/* Navigation bar styling */
 nav {
-    font-size: 14px;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 99;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
-    width: 100%;
-    padding: 1em;
+    padding: 0 20px;
     background: linear-gradient(to right, #000, #05232d);
+    height: 60px;
     border-bottom: 2px solid #513e1d;
+    z-index: 1000;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2em;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #c5c0ab;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f0efea;
+    border-bottom: 2px solid #947034;
 }
 
 footer {
@@ -56,6 +85,87 @@ footer {
 .footer-home {
     position: fixed;
     bottom: 0;
+}
+
+/* Login container */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 60px; /* Adjust for fixed nav bar */
+}
+
+.login-box {
+    background: rgba(1, 18, 49, 0); /* Semi-transparent background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(1, 18, 49, 0);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #947034; /* Add a border that matches the theme */
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #f0efea;
+}
+
+.login-box label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #c5c0ab;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background: #1b263b;
+    color: #fff;
+    font-size: 14px;
+}
+
+.login-box input::placeholder {
+    color: #c5c0ab;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background: #947034;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-box button:hover {
+    background: #c59d5a;
+}
+
+.login-box p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #c5c0ab;
+}
+
+.login-box p a {
+    color: #947034;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-box p a:hover {
+    color: #c59d5a;
 }
 
 nav ul {

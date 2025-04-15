@@ -3,20 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League of Legends Item Catalogue</title>
+    <title>Login</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <div class="form">
-        <h1>Log in to the League of Legends Item Catalogue</h1>
-        <form>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
-        </form>
-    </div>
-    
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>LoL Loadout</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="items.html">Catalogue</a></li>
+                <li><a href="champions.html">Champions</a></li>
+                <li><a href="favorites.html">Favorites</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form>
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#">Sign up</a></p>
+            </form>
+        </div>
+    </main>
 </body>
 </html>
