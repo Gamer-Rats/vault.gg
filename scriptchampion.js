@@ -69,27 +69,40 @@ function goToPage(pageNumber) {
 
 // Show champion details in a modal pop-up
 function showChampionDetails(championId) {
+    const modal = document.getElementById('champion-modal');
     const champ = champions.find(c => c.id === championId);
-    const detailSection = document.getElementById('detail');
 
     if (champ) {
         const html = `
-            <h2>${champ.name}</h2>
-            <p><strong>Title:</strong> ${champ.title}</p>
-            <p>${champ.blurb}</p>
-            <p><strong>Stats:</strong></p>
-            <ul>
-                <li>Attack: ${champ.info.attack}</li>
-                <li>Defense: ${champ.info.defense}</li>
-                <li>Magic: ${champ.info.magic}</li>
-                <li>Difficulty: ${champ.info.difficulty}</li>
-            </ul>
+            <div class="modal-content">
+                <button class="close-modal">&times;</button>
+                <p><strong>Title:</strong> ${champ.title}</p>
+                <p>${champ.blurb}</p>
+                <p><strong>Stats:</strong></p>
+                <ul>
+                    <li>Attack: ${champ.info.attack}</li>
+                    <li>Defense: ${champ.info.defense}</li>
+                    <li>Magic: ${champ.info.magic}</li>
+                    <li>Difficulty: ${champ.info.difficulty}</li>
+                </ul>
+            </div>
         `;
 
-        detailSection.innerHTML = html;
+        modal.innerHTML = html;
+        modal.classList.add('show');
 
-        // Scroll to the detail section
-        detailSection.scrollIntoView({ behavior: 'smooth' });
+        // Add event listener to close the modal
+        const closeModal = modal.querySelector('.close-modal');
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // Close modal when clicking outside the content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
     } else {
         console.error('Champion not found');
     }
