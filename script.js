@@ -4,9 +4,11 @@ async function getData() {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/item.json`);
     const data = await response.json();
     state = Object.values(data.data);
+    console.log('State:', state); // Debugging: Check the state variable
+
     renderList(state);
 
-    // Call renderSavedItems after data is loaded
+    // Call renderSavedItems only if the #saved-items container exists
     if (document.querySelector('#saved-items')) {
         renderSavedItems();
     }
@@ -111,16 +113,19 @@ function search() {
     }
 }
 
-document.querySelector('#searchKey').addEventListener('keypress', function (event) {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent the default form submission behavior
-        search(); // Call the search function
-    }
-});
+const searchKeyInput = document.querySelector('#searchKey');
+if (searchKeyInput) {
+    searchKeyInput.addEventListener('input', function () {
+        search(); // Call the search function on every input change
+    });
 
-document.querySelector('#searchKey').addEventListener('input', function () {
-    search(); // Call the search function on every input change
-});
+    searchKeyInput.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default form submission behavior
+            search(); // Call the search function
+        }
+    });
+}
 
 function saveItem(name) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -147,7 +152,13 @@ function saveItem(name) {
 function renderSavedItems() {
     const savedItemsContainer = document.querySelector('#saved-items');
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const allItems = state;
+    console.log('Favorites:', favorites); // Debugging: Check the favorites array
+
+    if (!state || state.length === 0) {
+        console.error('Error: State is empty. Items cannot be rendered.');
+        savedItemsContainer.innerHTML = '<p>Unable to load saved items. Please try again later.</p>';
+        return;
+    }
 
     if (favorites.length === 0) {
         savedItemsContainer.innerHTML = '<p>No saved items found.</p>';
@@ -156,12 +167,12 @@ function renderSavedItems() {
 
     let html = '';
     for (const name of favorites) {
-        const item = allItems.find(item => item.name.trim().toLowerCase() === name.trim().toLowerCase());
+        const item = state.find(item => item.name.trim().toLowerCase() === name.trim().toLowerCase());
         if (item) {
             html += `
                 <div class="saved-item">
-                    <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}">
-                    <p>${item.name}</p>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}" class="item-image">
+                    <p class="item-name">${item.name}</p>
                     <img src="images/x_button.png" alt="Remove" class="remove-button" onclick="removeFavorite('${name}')">
                 </div>
             `;
