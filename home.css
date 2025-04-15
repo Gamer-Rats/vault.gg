@@ -54,6 +54,10 @@ footer {
     bottom: 0;
 }
 
+.logo {
+    margin: 0% 10%;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
