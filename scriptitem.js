@@ -1,5 +1,9 @@
 let state = [];
 
+if (document.querySelector('#list')) {
+    getData(); // Only call getData if #list exists
+}
+
 async function getData() {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/item.json`);
     const data = await response.json();
@@ -45,6 +49,16 @@ function renderList(records) {
     });
 }
 
+
+function findRecord(name){
+    for (let rec of state) {
+        if (rec.name.trim().toLowerCase() === name.trim().toLowerCase()) {
+            return rec;
+        }
+    }
+    return null;
+}
+
 function selectWithDetails(name) {
     const result = document.querySelector('#detail');
     const data = findRecord(name);
@@ -55,12 +69,15 @@ function selectWithDetails(name) {
         const isFavorited = favorites.includes(name);
         const favoritedClass = isFavorited ? 'favorited' : '';
 
+        // Escape single quotes in the item name
+        const safeName = name.replace(/'/g, "\\'");
+
         const html = `
             <div class="item-detail-container">
                 <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${data.image.full}" alt="${data.name}">
                 <div class="item-header">
                     <h2>${data.name}</h2>
-                    <span class="save-ribbon ${favoritedClass}" data-name="${name}" onclick="saveItem('${name}')">
+                    <span class="save-ribbon ${favoritedClass}" data-name="${safeName}" onclick="saveItem('${safeName}')">
                         <i class="fa-solid fa-bookmark"></i>
                     </span>
                 </div>
@@ -83,7 +100,8 @@ function selectWithDetails(name) {
                             .map(into => {
                                 const upgradeItem = state.find(item => item.image.full === `${into}.png`);
                                 if (upgradeItem) {
-                                    return `<a href="#" onclick="selectWithDetails('${upgradeItem.name}')">
+                                    const safeUpgradeName = upgradeItem.name.replace(/'/g, "\\'");
+                                    return `<a href="#" onclick="selectWithDetails('${safeUpgradeName}')">
                                         <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${upgradeItem.name}" style="width: 50px; height: 50px;">
                                     </a>`;
                                 } else {
@@ -101,6 +119,7 @@ function selectWithDetails(name) {
         result.innerHTML = '<p>Item not found</p>';
     }
 }
+
 
 function search() {
     const searchKey = document.querySelector('#searchKey').value.trim().toUpperCase();
@@ -202,5 +221,3 @@ function removeFavorite(name) {
     // Re-render the saved items list
     renderSavedItems();
 }
-
-getData();
