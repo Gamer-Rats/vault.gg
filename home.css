@@ -22,24 +22,20 @@ body {
 }
 
 .logo h1 {
-    font-family: 'Beaufort';
-    font-size: 32px;
+    font-family: 'Beaufort', sans-serif;
+    font-size: 24px;
     color: #c5c0ab;
+    margin: 0;
 }
 
+/* Navigation bar styling */
 nav {
-    font-size: 14px;
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 99;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
-    width: 100%;
-    padding: 1em;
+    padding: 0 20px;
     background: linear-gradient(to right, #000, #05232d);
+    height: 60px;
     border-bottom: 2px solid #513e1d;
 }
 
@@ -58,39 +54,38 @@ footer {
     bottom: 0;
 }
 
-nav ul {
+.nav-links {
     display: flex;
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
-    gap: 4em;
+    gap: 2em;
 }
 
-nav a {
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links a {
     text-decoration: none;
     color: #c5c0ab;
-    padding: 0.5em 1em;
-    transition: color 0.5s ease;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
 }
 
-nav a:hover {
-    border-bottom: 1px solid #947034;
+.nav-links a:hover {
     color: #f0efea;
-}
-
-.logo {
-    margin: 0% 10%;
-}
-
-.login {
-    margin: 0% 10%;
+    border-bottom: 2px solid #947034;
 }
 
 .login a {
     background-color: transparent;
     padding: 8px 18px;
     border: 1px solid #947034;
-    transition: background-color 0.5s ease;
+    color: #c5c0ab;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .login a:hover {

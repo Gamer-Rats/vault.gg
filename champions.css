@@ -15,15 +15,61 @@ header .logo h1 {
     color: #fff;
 }
 
-.nav-links {
-    list-style: none;
+/* Navigation bar styling */
+nav {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: linear-gradient(to right, #000, #05232d);
+    height: 60px;
+    border-bottom: 2px solid #513e1d;
+}
+
+.logo h1 {
+    font-family: 'Beaufort', sans-serif;
+    font-size: 24px;
+    color: #c5c0ab;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2em;
+}
+
+.nav-links li {
+    margin: 0;
 }
 
 .nav-links a {
-    color: #fff;
     text-decoration: none;
+    color: #c5c0ab;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f0efea;
+    border-bottom: 2px solid #947034;
+}
+
+.login a {
+    background-color: transparent;
+    padding: 8px 18px;
+    border: 1px solid #947034;
+    color: #c5c0ab;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login a:hover {
+    background-color: #947034;
+    color: #f0efea;
 }
 
 .champion-list {
