@@ -30,6 +30,10 @@ body {
 
 /* Navigation bar styling */
 nav {
+    position: fixed; /* Fix the nav bar to the top */
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,6 +41,11 @@ nav {
     background: linear-gradient(to right, #000, #05232d);
     height: 60px;
     border-bottom: 2px solid #513e1d;
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+header {
+    margin-bottom: 60px; /* Add space below the fixed nav bar */
 }
 
 .nav-links {
