@@ -1,4 +1,5 @@
 let state = [];
+let champions = []; // Global variable to store champion data
 
 async function getData() {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/item.json`);
@@ -12,6 +13,15 @@ async function getData() {
     if (document.querySelector('#saved-items')) {
         renderSavedItems();
     }
+}
+
+async function getChampionData() {
+    const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/champion.json`);
+    const data = await response.json();
+    champions = Object.values(data.data);
+    console.log('Champions:', champions); // Debugging: Check the champions array
+
+    renderChampionList();
 }
 
 function renderList(records) {
@@ -43,6 +53,25 @@ function renderList(records) {
             item.classList.add('active');
         });
     });
+}
+
+function renderChampionList() {
+    const championList = document.querySelector('#champion-list');
+    if (!championList) {
+        console.error('Error: #champion-list element not found in the DOM.');
+        return;
+    }
+
+    let html = '';
+    for (const champ of champions) {
+        html += `
+            <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image.full}" 
+                 alt="${champ.name}" 
+                 onclick="showChampionDetails('${champ.id}')">
+        `;
+    }
+
+    championList.innerHTML = html;
 }
 
 function findRecord(name){
@@ -108,6 +137,30 @@ function selectWithDetails(name) {
         result.innerHTML = html;
     } else {
         result.innerHTML = '<p>Item not found</p>';
+    }
+}
+
+function showChampionDetails(championId) {
+    const result = document.querySelector('#detail');
+    const champ = champions.find(c => c.id === championId);
+
+    if (champ) {
+        const html = `
+            <h2>${champ.name}</h2>
+            <p><strong>Title:</strong> ${champ.title}</p>
+            <p>${champ.blurb}</p>
+            <p><strong>Stats:</strong></p>
+            <ul>
+                <li>Attack: ${champ.info.attack}</li>
+                <li>Defense: ${champ.info.defense}</li>
+                <li>Magic: ${champ.info.magic}</li>
+                <li>Difficulty: ${champ.info.difficulty}</li>
+            </ul>
+        `;
+
+        result.innerHTML = html;
+    } else {
+        result.innerHTML = '<p>Champion not found</p>';
     }
 }
 
@@ -201,3 +254,8 @@ function removeFavorite(name) {
 }
 
 getData();
+
+// Call the function to fetch champion data when the page loads
+if (document.querySelector('#champion-list')) {
+    getChampionData();
+}
