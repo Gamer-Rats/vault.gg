@@ -142,3 +142,14 @@ nav a:hover {
 .browse a:hover {
     background-color: #c59d5a;
 }
+
+.video-link {
+    color: #947034; /* Gold color */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.video-link:hover {
+    color: #c59d5a; /* Lighter gold on hover */
+}
