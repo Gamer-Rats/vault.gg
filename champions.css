@@ -73,37 +73,105 @@ nav {
 }
 
 .champion-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
     justify-content: center;
+    align-items: center;
 }
 
 .champion-list img {
-    width: 80px;
-    height: 80px;
-    border-radius: 5px;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    transition: transform 0.2s ease;
 }
 
 .champion-list img:hover {
     transform: scale(1.1);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination-button {
+    background-color: #0d1b2a;
+    color: #c5c0ab;
+    border: 1px solid #947034;
+    padding: 8px 12px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination-button.active {
+    background-color: #947034;
+    color: #fff;
+}
+
+.pagination-button:hover {
+    background-color: #c59d5a;
+    color: #fff;
 }
 
 #detail {
     padding: 20px;
     background-color: #1b263b;
     border-radius: 8px;
-    margin: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    color: #c5c0ab;
 }
 
 #detail h2 {
     color: #f39c12;
+    margin-bottom: 10px;
 }
 
 #detail p {
     margin: 10px 0;
     line-height: 1.5;
+}
+
+#detail ul {
+    list-style: none;
+    padding: 0;
+}
+
+#detail ul li {
+    margin: 5px 0;
+}
+
+.filter {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.filter label {
+    font-size: 16px;
+    color: #c5c0ab;
+    margin-right: 10px;
+}
+
+.filter select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #947034;
+    border-radius: 5px;
+    background-color: #0d1b2a;
+    color: #c5c0ab;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter select:hover {
+    border-color: #c59d5a;
 }
