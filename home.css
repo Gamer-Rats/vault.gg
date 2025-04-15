@@ -39,25 +39,6 @@ nav {
     border-bottom: 2px solid #513e1d;
 }
 
-footer {
-    width: 100%;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    background: rgba(255, 255, 255, 0.026);
-}
-
-.footer-home {
-    position: fixed;
-    bottom: 0;
-}
-
-.logo {
-    margin: 0% 10%;
-}
-
 .nav-links {
     display: flex;
     list-style: none;
@@ -95,6 +76,49 @@ footer {
 .login a:hover {
     background-color: #947034;
     color: #f0efea;
+}
+
+footer {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.026);
+}
+
+.footer-home {
+    position: fixed;
+    bottom: 0;
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    gap: 4em;
+}
+
+nav a {
+    text-decoration: none;
+    color: #c5c0ab;
+    padding: 0.5em 1em;
+    transition: color 0.5s ease;
+}
+
+nav a:hover {
+    border-bottom: 1px solid #947034;
+    color: #f0efea;
+}
+
+.logo {
+    margin: 0% 10%;
+}
+
+.login {
+    margin: 0% 10%;
 }
 
 .home {
@@ -146,12 +170,4 @@ footer {
 
 .browse a:hover {
     background-color: #c59d5a;
-}
-
-.champions-button {
-    background-color: #05232d; /* Different color for the Champions button */
-}
-
-.champions-button:hover {
-    background-color: #074c4c; /* Hover effect for the Champions button */
 }
