@@ -124,3 +124,19 @@ nav {
 .signup-box button:hover {
     background: #c59d5a;
 }
+
+.signup-box p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #c5c0ab;
+}
+
+.signup-box p a {
+    color: #947034;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-box p a:hover {
+    color: #c59d5a;
+}
