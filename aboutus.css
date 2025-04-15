@@ -17,7 +17,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    height: 100vh;
+    height: 90vh;
     color: #c5c0ab;
 }
 
@@ -142,13 +142,13 @@ h1 {
     font-size: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
-    color: #f0efea;
+    color: #c5c0ab;
 }
 
 section p {
     font-size: 16px;
     margin-bottom: 20px;
-    color: #f0efea;
+    color: #c5c0ab;
 }
 
 .video-link {
