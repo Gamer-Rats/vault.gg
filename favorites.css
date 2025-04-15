@@ -197,24 +197,36 @@ nav a:hover {
     gap: 20px;
     flex-wrap: wrap;
     margin-top: 20px;
+    margin-bottom: 50px; /* Add more space below items */
 }
 
+/* Style for individual saved item cards */
 .saved-item {
-    position: relative;
+    position: relative; /* Required for the remove button to position correctly */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #011a21;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100px; /* Ensure consistent width */
+    height: 100px; /* Ensure consistent height */
+    background-color: transparent; /* Remove the background box */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove rounded corners */
+    box-shadow: none; /* Remove the shadow */
+    transition: transform 0.3s ease; /* Keep the hover transform effect */
 }
 
+/* Hover effect for saved items */
+.saved-item:hover {
+    transform: scale(1.05); /* Scale the container */
+    box-shadow: none; /* Ensure no shadow appears on hover */
+}
+
+/* Style for item images */
 .saved-item img {
-    width: 80px;
+    width: 80px; /* Ensure consistent size */
     height: 80px;
     margin-bottom: 10px;
+    object-fit: cover;
 }
 
 .saved-item p {
@@ -224,21 +236,71 @@ nav a:hover {
 }
 
 .saved-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05); /* Keep the hover scaling effect */
+    box-shadow: none; /* Ensure no shadow appears on hover */
 }
 
+/* Global style for the remove button */
 .remove-button {
     position: absolute;
     top: 5px;
     right: 5px;
-    width: 50px !important; /* Force the width */
-    height: 50px !important; /* Force the height */
+    width: 40px;      /* Explicit size, adjust as needed */
+    height: 40px;
+    min-width: 40px;  /* Prevent shrinking */
+    min-height: 40px;
+    max-width: 40px;  /* Prevent growing */
+    max-height: 40px;
     cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    object-fit: contain;
     transition: transform 0.3s ease;
-    object-fit: contain; /* Ensure the image fits within the dimensions */
-    background: none; /* Remove any background that might be applied */
-    border: none; /* Remove any border that might be applied */
-    padding: 0; /* Remove any padding */
+    z-index: 2;
 }
 
+.remove-button:hover {
+    transform: scale(1.2); /* Add a hover effect for better UX */
+}
+
+/* Center-align the saved champions container */
+.saved-champions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center-align the icons horizontally */
+    position: relative;
+}
+
+/* Style for individual saved champion cards */
+.saved-champion {
+    position: relative; /* Required for the remove button to position correctly */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px; /* Ensure consistent width */
+    height: 100px; /* Ensure consistent height */
+    text-align: center;
+}
+
+/* Hover effect for saved champions */
+.saved-champion:hover {
+    transform: scale(1.05); /* Scale the container */
+    box-shadow: none; /* Ensure no shadow appears on hover */
+}
+
+/* Style for champion images */
+.saved-champion .champion-image {
+    width: 80px; /* Ensure consistent size */
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Style for the champion name */
+.saved-champion .champion-name {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #fff; /* Adjust color to match your theme */
+}

@@ -184,3 +184,18 @@ nav {
 .filter select:hover {
     border-color: #c59d5a;
 }
+
+.save-ribbon {
+    cursor: pointer;
+    font-size: 20px;
+    color: #ccc;
+    margin-left: 10px;
+}
+
+.save-ribbon.favorited {
+    color: #f39c12;
+}
+
+.save-ribbon:hover {
+    color: #f39c12;
+}

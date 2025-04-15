@@ -72,11 +72,24 @@ function showChampionDetails(championId) {
     const champ = champions.find(c => c.id === championId);
     const detailSection = document.getElementById('detail');
 
+    if (!detailSection) {
+        console.error('Error: #detail element not found in the DOM.');
+        return;
+    }
+
     if (champ) {
+        // Check if the champion is already favorited
+        const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
+        const isFavorited = favoriteChampions.some(favChamp => favChamp.id === champ.id);
+        const favoritedClass = isFavorited ? 'favorited' : '';
+
         const html = `
             <div class="champion-details">
                 <div class="ribbon">
                     <span>${champ.name}</span>
+                    <span class="save-ribbon ${favoritedClass}" onclick="toggleFavoriteChampion('${champ.id}')">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </span>
                 </div>
                 <div class="champion-info">
                     <p><strong>Title:</strong> ${champ.title}</p>
@@ -115,6 +128,33 @@ function showChampionDetails(championId) {
     } else {
         console.error('Champion not found');
     }
+}
+
+function toggleFavoriteChampion(championId) {
+    const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
+    const champ = champions.find(c => c.id === championId);
+
+    if (!champ) {
+        console.error('Champion not found');
+        return;
+    }
+
+    const isFavorited = favoriteChampions.some(favChamp => favChamp.id === champ.id);
+
+    if (isFavorited) {
+        // Remove from favorites
+        const updatedFavorites = favoriteChampions.filter(favChamp => favChamp.id !== champ.id);
+        localStorage.setItem('favoriteChampions', JSON.stringify(updatedFavorites));
+        console.log(`Removed ${champ.name} from favorites.`);
+    } else {
+        // Add to favorites
+        favoriteChampions.push({ id: champ.id, name: champ.name, image: champ.image.full });
+        localStorage.setItem('favoriteChampions', JSON.stringify(favoriteChampions));
+        console.log(`Added ${champ.name} to favorites.`);
+    }
+
+    // Re-render the champion details to update the ribbon state
+    showChampionDetails(championId);
 }
 
 function filterChampions() {

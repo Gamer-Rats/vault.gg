@@ -227,4 +227,44 @@ function removeFavorite(name) {
     renderSavedItems();
 }
 
+function renderSavedChampions() {
+    const savedChampionsContainer = document.querySelector('#saved-champions');
+    const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
+    console.log('Favorite Champions:', favoriteChampions); // Debugging: Check the favorites array
+
+    if (!savedChampionsContainer) {
+        console.error('Error: #saved-champions container not found in the DOM.');
+        return;
+    }
+
+    if (favoriteChampions.length === 0) {
+        savedChampionsContainer.innerHTML = '<p>No saved champions found.</p>';
+        return;
+    }
+
+    let html = '';
+    for (const champ of favoriteChampions) {
+        html += `
+            <div class="saved-champion">
+                <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image}" alt="${champ.name}" class="champion-image">
+                <p class="champion-name">${champ.name}</p>
+                <img src="images/x_button.png" alt="Remove" class="remove-button" onclick="removeFavoriteChampion('${champ.id}')">
+            </div>
+        `;
+    }
+
+    savedChampionsContainer.innerHTML = html;
+}
+
+function removeFavoriteChampion(championId) {
+    const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
+    const updatedFavorites = favoriteChampions.filter(favChamp => favChamp.id !== championId);
+    localStorage.setItem('favoriteChampions', JSON.stringify(updatedFavorites));
+
+    console.log(`Removed champion with ID ${championId} from favorites.`);
+
+    // Re-render the saved champions list
+    renderSavedChampions();
+}
+
 getData();
