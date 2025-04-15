@@ -89,7 +89,16 @@ function selectWithDetails(name) {
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     ${data.into
                         ? data.into
-                            .map(into => `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${into}" style="width: 50px; height: 50px;">`)
+                            .map(into => {
+                                const upgradeItem = state.find(item => item.image.full === `${into}.png`);
+                                if (upgradeItem) {
+                                    return `<a href="#" onclick="selectWithDetails('${upgradeItem.name}')">
+                                        <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="${upgradeItem.name}" style="width: 50px; height: 50px;">
+                                    </a>`;
+                                } else {
+                                    return `<img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${into}.png" alt="Unknown Item" style="width: 50px; height: 50px;">`;
+                                }
+                            })
                             .join('')
                         : '<p>No upgrades available</p>'}
                 </div>

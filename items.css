@@ -334,3 +334,18 @@ nav a:hover {
     margin: 5px 0;
     font-weight: bold;
 }
+
+.champion {
+    text-align: center;
+    width: 60px;
+}
+
+.champion img {
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.champion p {
+    font-size: 12px;
+    color: #fff;
+}
