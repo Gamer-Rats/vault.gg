@@ -152,32 +152,9 @@ nav a:hover {
     font-size: 48px;
 }
 
-.welcome p {
-    font-size: 22px;
-    padding-bottom: 1.5em;
-}
-
-.welcome #beaufort {
-    font-family: 'Beaufort';
-    font-size: 54px;
-}
-
-.browse a {
-    text-decoration: none;
-    color: #f0efea;
-    background-color: #947034;
-    padding: 14px 20px;
-    font-weight: 500;
-    transition: background-color 0.5s ease;
-}
-
-.browse a:hover {
-    background-color: #c59d5a;
-}
-
 .favorites {
     padding: 20px;
-    color: #f0efea;
+    color: #c5c0ab;
     text-align: center;
 }
 
@@ -188,7 +165,7 @@ nav a:hover {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: #f0efea;
+    color: #c5c0ab;
 }
 
 .saved-items-container {
