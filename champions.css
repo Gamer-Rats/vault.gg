@@ -199,3 +199,8 @@ nav {
 .save-ribbon:hover {
     color: #f39c12;
 }
+
+#champion-list-container h2 {
+    text-align: center;
+    width: 100%;
+}
