@@ -100,25 +100,27 @@ function selectWithDetails(name) {
     }
 }
 
-function search(){
-    let searchKey = document.querySelector('#searchKey').value;
-    let results = [];
+function search() {
+    const searchKey = document.querySelector('#searchKey').value.trim().toUpperCase();
+    const results = state.filter(rec => rec.name.toUpperCase().includes(searchKey));
 
-    for(let rec of state){
-        let searchText = rec.name.toUpperCase();
-        searchKey = searchKey.toUpperCase();
-
-        if(searchText.search(searchKey) !== -1){
-            results.push(rec);
-        }
-    }
-
-    if(results.length === 0){
+    if (results.length === 0) {
         document.querySelector('#list').innerHTML = '<li>No items found</li>';
-    } else{
+    } else {
         renderList(results);
     }
 }
+
+document.querySelector('#searchKey').addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission behavior
+        search(); // Call the search function
+    }
+});
+
+document.querySelector('#searchKey').addEventListener('input', function () {
+    search(); // Call the search function on every input change
+});
 
 function saveItem(name) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
