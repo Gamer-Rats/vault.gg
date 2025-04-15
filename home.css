@@ -129,6 +129,11 @@ footer {
     font-size: 54px;
 }
 
+.browse {
+    display: flex;
+    gap: 20px; /* Add space between the buttons */
+}
+
 .browse a {
     text-decoration: none;
     color: #f0efea;
@@ -136,8 +141,17 @@ footer {
     padding: 14px 20px;
     font-weight: 500;
     transition: background-color 0.5s ease;
+    border-radius: 5px; /* Add rounded corners for consistency */
 }
 
 .browse a:hover {
     background-color: #c59d5a;
+}
+
+.champions-button {
+    background-color: #05232d; /* Different color for the Champions button */
+}
+
+.champions-button:hover {
+    background-color: #074c4c; /* Hover effect for the Champions button */
 }
