@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* General styling */
+body {
+    background-image: url("images/bg-img.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Navigation bar styling */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: linear-gradient(to right, #000, #05232d);
+    height: 60px;
+    border-bottom: 2px solid #513e1d;
+    z-index: 1000;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2em;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #c5c0ab;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f0efea;
+    border-bottom: 2px solid #947034;
+}
+
+/* Sign Up container */
+.signup-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 60px; /* Adjust for fixed nav bar */
+}
+
+.signup-box {
+    background: rgba(0, 0, 0, 0);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #947034; /* Add a border that matches the theme */
+}
+
+.signup-box h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #f0efea;
+}
+
+.signup-box label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #c5c0ab;
+}
+
+.signup-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background: #1b263b;
+    color: #fff;
+    font-size: 14px;
+}
+
+.signup-box input::placeholder {
+    color: #c5c0ab;
+}
+
+.signup-box button {
+    width: 100%;
+    padding: 10px;
+    background: #947034;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-box button:hover {
+    background: #c59d5a;
+}
