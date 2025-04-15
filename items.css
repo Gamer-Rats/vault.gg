@@ -160,14 +160,20 @@ nav a:hover {
     width: 300px; /* Adjust width to match the design */
 }
 
-#searchKey{
+#searchKey {
     width: 70%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 10px 30px; /* Increase padding on the left to move the text */
     display: inline-block;
+    background-color: #011a21; /* Ensure the background matches the design */
+    color: #c5c0ab; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+    outline: none; /* Remove focus outline */
+    font-size: 14px; /* Adjust font size */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
-#searchButton{
+#searchButton {
     padding: 10px;
     background-color: #011a21;
     color: #c5c0ab;
@@ -175,7 +181,7 @@ nav a:hover {
     cursor: pointer;
 }
 
-#detail{
+#detail {
     flex-grow: 6;
     height: 100%;
     text-align: center;
