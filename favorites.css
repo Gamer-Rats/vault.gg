@@ -142,3 +142,71 @@ nav a:hover {
 .browse a:hover {
     background-color: #c59d5a;
 }
+
+.favorites {
+    padding: 20px;
+    color: #f0efea;
+    text-align: center;
+}
+
+.favorites h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #f0efea;
+}
+
+.saved-items-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.saved-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #011a21;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.saved-item img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.saved-item p {
+    font-size: 1rem;
+    color: #c5c0ab;
+    margin: 0;
+}
+
+.saved-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 50px !important; /* Force the width */
+    height: 50px !important; /* Force the height */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    object-fit: contain; /* Ensure the image fits within the dimensions */
+    background: none; /* Remove any background that might be applied */
+    border: none; /* Remove any border that might be applied */
+    padding: 0; /* Remove any padding */
+}
+
