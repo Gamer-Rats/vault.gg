@@ -25,7 +25,7 @@
     <main class="signup-container">
         <div class="signup-box">
             <h2>Sign Up</h2>
-            <form onsubmit="redirectToHome(event)">
+            <form id="signup-form">
                 <label for="username">Username</label>
                 <input type="text" id="username" placeholder="Enter your username" required>
                 <label for="email">Email</label>
@@ -34,15 +34,62 @@
                 <input type="password" id="password" placeholder="Enter your password" required>
                 <button type="submit">Sign Up</button>
             </form>
+            <p id="signup-message"></p>
             <p>Already have an account? <a href="login.html">Login</a></p>
         </div>
     </main>
+
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+    <script>
+      // TODO: Replace with your Firebase project config
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        // ...other config
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+    </script>
 
     <script>
         function redirectToHome(event) {
             event.preventDefault(); // Prevent the form from submitting normally
             window.location.href = "home.html"; // Redirect to the Home page
         }
+    </script>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                // Create user with email and password
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Store additional user info in Firestore
+                await firebase.firestore().collection('users').doc(user.uid).set({
+                    username: username,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('signup-message').textContent = "Sign up successful! Redirecting...";
+                setTimeout(() => window.location.href = "home.html", 1500);
+            } catch (error) {
+                document.getElementById('signup-message').textContent = error.message;
+            }
+        });
     </script>
 </body>
 </html>
