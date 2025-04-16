@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="signup.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <header>
@@ -13,7 +13,7 @@
                 <h1>vault.gg</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="items.html">Items</a></li>
                 <li><a href="champions.html">Champions</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
@@ -22,27 +22,18 @@
         </nav>
     </header>
 
-    <main class="signup-container">
-        <div class="signup-box">
-            <h2>Sign Up</h2>
-            <form onsubmit="redirectToHome(event)">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
+    <main class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form>
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="Enter your email" required>
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password" required>
-                <button type="submit">Sign Up</button>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="signup.html">Sign up</a></p>
             </form>
-            <p>Already have an account? <a href="login.html">Login</a></p>
         </div>
     </main>
-
-    <script>
-        function redirectToHome(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
-            window.location.href = "home.html"; // Redirect to the Home page
-        }
-    </script>
 </body>
 </html>
