@@ -78,69 +78,62 @@ function showChampionDetails(championId) {
     }
 
     if (champ) {
+        // Check if the user is logged in
         const user = firebase.auth().currentUser;
-        if (!user) {
-            alert("You need to be logged in to view favorites.");
-            return;
+        let isFavorited = false;
+
+        if (user && window.userFavorites) {
+            // Check if the champion is already favorited
+            const favoriteChampions = window.userFavorites.champions || [];
+            isFavorited = favoriteChampions.some(favChamp => favChamp.id === champ.id);
         }
 
-        // Fetch the user's current favorites from Firestore
-        firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
-            let favoriteChampions = [];
-            if (doc.exists && doc.data().favorites) {
-                favoriteChampions = doc.data().favorites.champions || [];
-            }
+        const favoritedClass = isFavorited ? 'favorited' : '';
 
-            const isFavorited = favoriteChampions.some(favChamp => favChamp.id === champ.id);
-            const favoritedClass = isFavorited ? 'favorited' : '';
-
-            const html = `
-                <div class="champion-details">
-                    <div class="ribbon">
-                        <span>${champ.name}</span>
-                        <span class="save-ribbon ${favoritedClass}" onclick="toggleFavoriteChampion('${champ.id}')">
-                            <i class="fa-solid fa-bookmark"></i>
-                        </span>
-                    </div>
-                    <div class="champion-info">
-                        <p><strong>Title:</strong> ${champ.title}</p>
-                        <p><strong>Stats:</strong></p>
-                        <ul>
-                            <li>Attack: ${champ.info.attack}</li>
-                            <li>Defense: ${champ.info.defense}</li>
-                            <li>Magic: ${champ.info.magic}</li>
-                            <li>Difficulty: ${champ.info.difficulty}</li>
-                        </ul>
-                        <p><strong>Tags:</strong> ${champ.tags.join(', ')}</p>
-                        <p><strong>Partype:</strong> ${champ.partype}</p>
-                        <p><strong>Base Stats:</strong></p>
-                        <ul>
-                            <li>HP: ${champ.stats.hp}</li>
-                            <li>HP per Level: ${champ.stats.hpperlevel}</li>
-                            <li>MP: ${champ.stats.mp}</li>
-                            <li>MP per Level: ${champ.stats.mpperlevel}</li>
-                            <li>Move Speed: ${champ.stats.movespeed}</li>
-                            <li>Armor: ${champ.stats.armor}</li>
-                            <li>Armor per Level: ${champ.stats.armorperlevel}</li>
-                            <li>Attack Range: ${champ.stats.attackrange}</li>
-                            <li>Attack Damage: ${champ.stats.attackdamage}</li>
-                            <li>Attack Damage per Level: ${champ.stats.attackdamageperlevel}</li>
-                            <li>Attack Speed: ${champ.stats.attackspeed}</li>
-                            <li>Attack Speed per Level: ${champ.stats.attackspeedperlevel}</li>
-                        </ul>
-                    </div>
+        const html = `
+            <div class="champion-details">
+                <div class="ribbon">
+                    <span>${champ.name}</span>
+                    <span class="save-ribbon ${favoritedClass}" onclick="${user ? `toggleFavoriteChampion('${champ.id}')` : 'alert(\'You need to be logged in to favorite champions.\')'}">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </span>
                 </div>
-            `;
+                <div class="champion-info">
+                    <p><strong>Title:</strong> ${champ.title}</p>
+                    <p><strong>Stats:</strong></p>
+                    <ul>
+                        <li>Attack: ${champ.info.attack}</li>
+                        <li>Defense: ${champ.info.defense}</li>
+                        <li>Magic: ${champ.info.magic}</li>
+                        <li>Difficulty: ${champ.info.difficulty}</li>
+                    </ul>
+                    <p><strong>Tags:</strong> ${champ.tags.join(', ')}</p>
+                    <p><strong>Partype:</strong> ${champ.partype}</p>
+                    <p><strong>Base Stats:</strong></p>
+                    <ul>
+                        <li>HP: ${champ.stats.hp}</li>
+                        <li>HP per Level: ${champ.stats.hpperlevel}</li>
+                        <li>MP: ${champ.stats.mp}</li>
+                        <li>MP per Level: ${champ.stats.mpperlevel}</li>
+                        <li>Move Speed: ${champ.stats.movespeed}</li>
+                        <li>Armor: ${champ.stats.armor}</li>
+                        <li>Armor per Level: ${champ.stats.armorperlevel}</li>
+                        <li>Attack Range: ${champ.stats.attackrange}</li>
+                        <li>Attack Damage: ${champ.stats.attackdamage}</li>
+                        <li>Attack Damage per Level: ${champ.stats.attackdamageperlevel}</li>
+                        <li>Attack Speed: ${champ.stats.attackspeed}</li>
+                        <li>Attack Speed per Level: ${champ.stats.attackspeedperlevel}</li>
+                    </ul>
+                </div>
+            </div>
+        `;
 
-            detailSection.innerHTML = html;
+        detailSection.innerHTML = html;
 
-            // Scroll to the detail section
-            detailSection.scrollIntoView({ behavior: 'smooth' });
-        }).catch(error => {
-            console.error('Error fetching favorites:', error);
-        });
+        // Scroll to the detail section
+        detailSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-        console.error('Champion not found');
+        detailSection.innerHTML = '<p>Champion not found</p>';
     }
 }
 
