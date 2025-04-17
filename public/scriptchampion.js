@@ -25,6 +25,8 @@ function renderChampionList() {
         return;
     }
 
+    console.log('Rendering champions...'); // Debugging: Check if this function is called
+
     // Calculate the start and end indices for the current page
     const startIndex = (currentPage - 1) * championsPerPage;
     const endIndex = startIndex + championsPerPage;
@@ -33,12 +35,15 @@ function renderChampionList() {
     let html = '';
     for (const champ of championsToDisplay) {
         html += `
-            <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image.full}" 
-                 alt="${champ.name}" 
-                 onclick="showChampionDetails('${champ.id}')">
+            <div class="champion-item">
+                <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image.full}" 
+                     alt="${champ.name}" 
+                     onclick="showChampionDetails('${champ.id}')">
+            </div>
         `;
     }
 
+    console.log('Generated HTML:', html); // Debugging: Check the generated HTML
     championList.innerHTML = html;
 }
 
@@ -170,10 +175,14 @@ function toggleFavoriteChampion(championId) {
                 favorites: {
                     champions: favoriteChampions
                 }
-            }, { merge: true });
+            }, { merge: true }).then(() => {
+                // Update the ribbon to show it is favorited
+                const ribbon = document.querySelector(`.save-ribbon`);
+                if (ribbon) {
+                    ribbon.classList.add('favorited');
+                }
+            });
 
-            // Re-render the champion details to update the ribbon state
-            showChampionDetails(championId);
         } else {
             console.log(`${champ.name} is already in favorites.`);
         }
@@ -208,9 +217,11 @@ function renderFilteredChampionList(filteredChampions) {
     let html = '';
     for (const champ of filteredChampions) {
         html += `
-            <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image.full}" 
-                 alt="${champ.name}" 
-                 onclick="showChampionDetails('${champ.id}')">
+            <div class="champion-item">
+                <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/champion/${champ.image.full}" 
+                     alt="${champ.name}" 
+                     onclick="showChampionDetails('${champ.id}')">
+            </div>
         `;
     }
 
@@ -218,6 +229,25 @@ function renderFilteredChampionList(filteredChampions) {
 }
 
 // Initialize the champion data when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    getChampionData();
+document.addEventListener('DOMContentLoaded', function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists && doc.data().favorites) {
+                    window.userFavorites = doc.data().favorites;
+                } else {
+                    window.userFavorites = { items: [], champions: [] };
+                }
+                // Render the champion list after loading favorites
+                getChampionData();
+            }).catch(error => {
+                console.error('Error fetching user favorites:', error);
+                getChampionData(); // Fallback to render champions even if favorites fail
+            });
+        } else {
+            window.userFavorites = null;
+            // Render the champion list for guests
+            getChampionData();
+        }
+    });
 });
