@@ -18,15 +18,23 @@
                 <li><a href="champions.html">Champions</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
                 <li><a href="aboutus.html">About Us</a></li>
-                <li id="logout-nav"></li>
             </ul>
+            <div class="login-logout">
+                <li id="logout-nav"></li>   
+            </div>
         </nav>
     </header>
 
     <main>
         <section class="about-us">
             <h1>About <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" style="color: inherit; text-decoration: underline;">Us</a></h1>
-            <p>Welcome to the League of Legends Items and Champions Catalogue! Learn more about our journey in developing vault.gg by watching the video below.</p>
+            
+            <p>Welcome to the League of Legends Items and Champions Catalogue! We are a team of passionate gamers and developers who wanted to create a comprehensive resource for League of Legends players. Our goal is to provide 
+                detailed information about items and champions, helping players make informed decisions in their gameplay.</p>
+            <img src="images/GamerRats.jpg" alt="Team Photo" id="team-photo">
+            <figcaption>GamerRats Logo in courtesy of GamerRats</figcaption>
+            
+            <p>Learn more about our journey in developing vault.gg by watching the video below.</p>
             <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0&ab_channel=Duran" target="_blank" class="video-link">Video About vault.gg</a>
         </section>
     </main>
@@ -53,8 +61,8 @@
             const logoutNav = document.getElementById('logout-nav');
             if (logoutNav) {
                 if (user) {
-                    logoutNav.innerHTML = '<a href="#" id="logout-btn">Logout</a>';
-                    document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    logoutNav.innerHTML = '<a href="#" id="logout-nav">Logout</a>';
+                    document.getElementById('logout-nav').addEventListener('click', function(e) {
                         e.preventDefault();
                         firebase.auth().signOut().then(function() {
                             window.location.href = "login.html";

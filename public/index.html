@@ -19,8 +19,10 @@
                 <li><a href="champions.html">Champions</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
                 <li><a href="aboutus.html">About Us</a></li>
-                <li id="logout-nav"></li>
             </ul>
+            <div class="login-logout">
+                <li id="logout-nav"></li>
+            </div>
         </nav>
     </header>
 
@@ -65,8 +67,8 @@
             const logoutNav = document.getElementById('logout-nav');
             if (logoutNav) {
                 if (user) {
-                    logoutNav.innerHTML = '<a href="#" id="logout-btn">Logout</a>';
-                    document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    logoutNav.innerHTML = '<a href="#" id="logout-nav">Logout</a>';
+                    document.getElementById('logout-nav').addEventListener('click', function(e) {
                         e.preventDefault();
                         firebase.auth().signOut().then(function() {
                             window.location.href = "login.html";
@@ -80,11 +82,11 @@
     });
     </script>
 
-    <script>
+    <!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('logout-nav').innerHTML = '<a href="#">Test Button</a>';
     });
-    </script>
+    </script> -->
 </body>
   
 </html>

@@ -45,6 +45,8 @@ nav {
     margin: 0;
     padding: 0;
     gap: 2em;
+    align-items: center; /* Center the list items vertically */
+    justify-content: center; /* Center the list items */
 }
 
 .nav-links li {
@@ -64,7 +66,17 @@ nav {
     border-bottom: 2px solid #947034;
 }
 
-.login a {
+.login-logout {
+    margin: 0 10%;
+}
+
+#logout-nav {
+    margin-left: auto;
+    margin-right: 50%;
+    display: flex;
+}
+
+nav #logout-nav a {
     background-color: transparent;
     padding: 8px 18px;
     border: 1px solid #947034;
@@ -73,9 +85,13 @@ nav {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.login a:hover {
+nav #logout-nav a:hover {
     background-color: #947034;
     color: #f0efea;
+}
+
+.logo {
+    margin: 0% 10%;
 }
 
 footer {
@@ -92,80 +108,6 @@ footer {
     position: fixed;
     bottom: 0;
 }
-
-nav ul {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    gap: 4em;
-}
-
-nav a {
-    text-decoration: none;
-    color: #c5c0ab;
-    padding: 0.5em 1em;
-    transition: color 0.5s ease;
-}
-
-nav a:hover {
-    border-bottom: 1px solid #947034;
-    color: #f0efea;
-}
-
-.logo {
-    margin: 0% 10%;
-}
-
-.login {
-    margin: 0% 10%;
-}
-
-.home {
-    height: 85vh;
-    display: flex;
-    align-items: center;
-}
-
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 5em;
-    margin: 0% 10%;
-}
-
-.welcome {
-    width: 55%;
-}
-
-.welcome h2 {
-    font-size: 48px;
-}
-
-.welcome p {
-    font-size: 22px;
-    padding-bottom: 1.5em;
-}
-
-.welcome #beaufort {
-    font-family: 'Beaufort';
-    font-size: 54px;
-}
-
-.browse a {
-    text-decoration: none;
-    color: #f0efea;
-    background-color: #947034;
-    padding: 14px 20px;
-    font-weight: 500;
-    transition: background-color 0.5s ease;
-}
-
-.browse a:hover {
-    background-color: #c59d5a;
-}
-
 
 .items {
     display: flex;

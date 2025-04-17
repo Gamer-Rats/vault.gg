@@ -30,6 +30,13 @@ header {
     margin-bottom: 60px; /* Add space below the fixed nav bar */
 }
 
+.logo h1 {
+    font-family: 'Beaufort', sans-serif;
+    font-size: 24px;
+    color: #c5c0ab;
+    margin: 0;
+}
+
 /* Navigation bar styling */
 nav {
     position: fixed; /* Fix the nav bar to the top */
@@ -46,23 +53,14 @@ nav {
     z-index: 1000; /* Ensure it stays above other elements */
 }
 
-.logo {
-    margin: 0% 10%;
-}
-
-.logo h1 {
-    font-family: 'Beaufort';
-    font-size: 24px;
-    color: #c5c0ab;
-    margin: 0;
-}
-
 .nav-links {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
     gap: 2em;
+    align-items: center; /* Center the list items vertically */
+    justify-content: center; /* Center the list items */
 }
 
 .nav-links li {
@@ -82,11 +80,17 @@ nav {
     border-bottom: 2px solid #947034;
 }
 
-.login {
-    margin: 0% 10%;
+.login-logout {
+    margin: 0 10%;
 }
 
-.login a {
+#logout-nav {
+    margin-left: auto;
+    margin-right: 50%;
+    display: flex;
+}
+
+nav #logout-nav a {
     background-color: transparent;
     padding: 8px 18px;
     border: 1px solid #947034;
@@ -95,9 +99,13 @@ nav {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.login a:hover {
+nav #logout-nav a:hover {
     background-color: #947034;
     color: #f0efea;
+}
+
+.logo {
+    margin: 0% 10%;
 }
 
 footer {
@@ -244,19 +252,4 @@ section h2 {
 #champion-list-container h2 {
     text-align: center;
     width: 100%;
-}
-
-#logout-nav {
-    list-style: none;
-}
-
-#logout-nav a {
-    color: inherit;
-    text-decoration: none;
-    padding: 8px 16px;
-    display: inline-block;
-}
-
-#logout-nav a:hover {
-    text-decoration: underline;
 }

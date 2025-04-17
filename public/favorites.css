@@ -54,6 +54,8 @@ header {
     margin: 0;
     padding: 0;
     gap: 2em;
+    align-items: center; /* Center the list items vertically */
+    justify-content: center; /* Center the list items */
 }
 
 .nav-links li {
@@ -73,6 +75,34 @@ header {
     border-bottom: 2px solid #947034;
 }
 
+.login-logout {
+    margin: 0 10%;
+}
+
+#logout-nav {
+    margin-left: auto;
+    margin-right: 50%;
+    display: flex;
+}
+
+nav #logout-nav a {
+    background-color: transparent;
+    padding: 8px 18px;
+    border: 1px solid #947034;
+    color: #c5c0ab;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav #logout-nav a:hover {
+    background-color: #947034;
+    color: #f0efea;
+}
+
+.logo {
+    margin: 0% 10%;
+}
+
 footer {
     width: 100%;
     height: 35px;
@@ -86,70 +116,6 @@ footer {
 .footer-home {
     position: fixed;
     bottom: 0;
-}
-
-nav ul {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    gap: 4em;
-}
-
-nav a {
-    text-decoration: none;
-    color: #c5c0ab;
-    padding: 0.5em 1em;
-    transition: color 0.5s ease;
-}
-
-nav a:hover {
-    border-bottom: 1px solid #947034;
-    color: #f0efea;
-}
-
-.logo {
-    margin: 0% 10%;
-}
-
-.login {
-    margin: 0% 10%;
-}
-
-.login a {
-    background-color: transparent;
-    padding: 8px 18px;
-    border: 1px solid #947034;
-    color: #c5c0ab;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.login a:hover {
-    background-color: #947034;
-    color: #f0efea;
-}
-
-.home {
-    height: 85vh;
-    display: flex;
-    align-items: center;
-}
-
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 5em;
-    margin: 0% 10%;
-}
-
-.welcome {
-    width: 55%;
-}
-
-.welcome h2 {
-    font-size: 48px;
 }
 
 .favorites {
@@ -275,19 +241,4 @@ nav a:hover {
 h2 {
     display: flex;
     align-items: center;
-}
-
-#logout-nav {
-    list-style: none;
-}
-
-#logout-nav a {
-    color: inherit;
-    text-decoration: none;
-    padding: 8px 16px;
-    display: inline-block;
-}
-
-#logout-nav a:hover {
-    text-decoration: underline;
 }
