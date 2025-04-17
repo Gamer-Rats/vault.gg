@@ -219,22 +219,12 @@ nav a:hover {
 
 /* Global style for the remove button */
 .remove-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 40px;      /* Explicit size, adjust as needed */
-    height: 40px;
-    min-width: 40px;  /* Prevent shrinking */
-    min-height: 40px;
-    max-width: 40px;  /* Prevent growing */
-    max-height: 40px;
+    display: inline-block;
+    width: 20px;
+    height: auto;
     cursor: pointer;
-    padding: 0;
-    background: none;
-    border: none;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-    z-index: 2;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
 .remove-button:hover {
@@ -280,4 +270,24 @@ nav a:hover {
     margin-top: 5px;
     font-size: 14px;
     color: #fff; /* Adjust color to match your theme */
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+}
+
+#logout-nav {
+    list-style: none;
+}
+
+#logout-nav a {
+    color: inherit;
+    text-decoration: none;
+    padding: 8px 16px;
+    display: inline-block;
+}
+
+#logout-nav a:hover {
+    text-decoration: underline;
 }

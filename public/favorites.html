@@ -6,14 +6,38 @@
     <title>Favorites</title>
     <link rel="stylesheet" href="favorites.css">
     <script src="script.js" defer></script>
+    <!-- Firebase scripts here -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (document.querySelector('#saved-items')) {
-                renderSavedItems();
-            }
-            if (document.querySelector('#saved-champions')) {
-                renderSavedChampions();
-            }
+        const firebaseConfig = {
+            apiKey: "AIzaSyAS6NmXkcY8T-DqzUxLfAVk5ImIiESRSh4",
+            authDomain: "info1601project-f47bb.firebaseapp.com",
+            projectId: "info1601project-f47bb",
+            // ...other config
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            firebase.auth().onAuthStateChanged(function(user) {
+                const logoutNav = document.getElementById('logout-nav');
+                if (logoutNav) {
+                    if (user) {
+                        logoutNav.innerHTML = '<a href="#" id="logout-btn">Logout</a>';
+                        document.getElementById('logout-btn').addEventListener('click', function(e) {
+                            e.preventDefault();
+                            firebase.auth().signOut().then(function() {
+                                window.location.href = "login.html";
+                            });
+                        });
+                    } else {
+                        logoutNav.innerHTML = '<a href="login.html">Login</a>';
+                    }
+                }
+            });
         });
     </script>
 </head>
@@ -29,38 +53,67 @@
                 <li><a href="champions.html">Champions</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
                 <li><a href="aboutus.html">About Us</a></li>
+                <li id="logout-nav"></li>
             </ul>
-            <div class="login">
-                <a href="login.html">Logout</a>
-            </div>
         </nav>
     </header>
 
     <main class="favorites">
         <!-- Section for Favorited Items -->
         <section id="favorited-items">
-            <h2><i class="fa-solid fa-bookmark"></i> Favorited Items</h2>
+            <h2 style="display: flex; align-items: center;">
+                <i class="fa-solid fa-bookmark"></i> Favorited Items
+                <img src="images/x_button.png" alt="Remove All" class="remove-button" id="remove-all-favorites" style="cursor:pointer; width:20px; margin-left:8px;">
+            </h2>
             <div id="saved-items" class="saved-items-container">
                 <!-- Saved items will be dynamically rendered here -->
-                <div class="saved-item">
-                    <img src="..." alt="..." />
-                    <img src="images/x_button.png" class="remove-button" alt="Remove" />
-                </div>
             </div>
         </section>
 
         <!-- Section for Favorited Champions -->
         <section id="favorited-champions">
-            <h2><i class="fa-solid fa-bookmark"></i> Favorited Champions</h2>
+            <h2 style="display: flex; align-items: center;">
+                <i class="fa-solid fa-bookmark"></i> Favorited Champions
+                <img src="images/x_button.png" alt="Remove All Champions" class="remove-button" id="remove-all-champions" style="cursor:pointer; width:20px; vertical-align:middle; margin-left:8px;">
+            </h2>
             <div id="saved-champions" class="saved-champions-container">
                 <!-- Saved champions will be dynamically rendered here -->
-                <div class="saved-champion">
-                    <img src="..." alt="..." class="champion-image" />
-                    <img src="images/x_button.png" class="remove-button" alt="Remove" />
-                </div>
             </div>
         </section>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (!user) {
+                    alert("You need to be logged in to use this page.");
+                    window.location.href = "login.html";
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const removeAllBtn = document.getElementById('remove-all-favorites');
+            if (removeAllBtn) {
+                removeAllBtn.addEventListener('click', function() {
+                    if (confirm('Remove all favorited items?')) {
+                        const user = firebase.auth().currentUser;
+                        if (user) {
+                            // Clear favorites in Firestore
+                            saveUserFavorites([], window.userFavorites ? window.userFavorites.champions || [] : []);
+                            if (!window.userFavorites) window.userFavorites = {};
+                            window.userFavorites.items = [];
+                            renderSavedItems([]);
+                        } else {
+                            // Clear localStorage for guests
+                            localStorage.setItem('favorites', JSON.stringify([]));
+                            renderSavedItems([]);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 

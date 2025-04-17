@@ -61,7 +61,7 @@
     <script>
         function redirectToHome(event) {
             event.preventDefault(); // Prevent the form from submitting normally
-            window.location.href = "home.html"; // Redirect to the Home page
+            window.location.href = "index.html"; // Redirect to the Home page
         }
     </script>
 
@@ -85,7 +85,7 @@
                 });
 
                 document.getElementById('signup-message').textContent = "Sign up successful! Redirecting...";
-                setTimeout(() => window.location.href = "home.html", 1500);
+                setTimeout(() => window.location.href = "login.html", 1500);
             } catch (error) {
                 document.getElementById('signup-message').textContent = error.message;
             }

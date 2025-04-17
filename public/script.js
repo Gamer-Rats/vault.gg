@@ -1,16 +1,34 @@
 let state = [];
+let userFavorites = null;
+let stateLoaded = false;
+let userLoaded = false;
 
 async function getData() {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/item.json`);
     const data = await response.json();
     state = Object.values(data.data);
-    console.log('State:', state); // Debugging: Check the state variable
-
+    stateLoaded = true;
+    tryRenderFavorites();
     renderList(state);
+}
 
-    // Call renderSavedItems only if the #saved-items container exists
-    if (document.querySelector('#saved-items')) {
-        renderSavedItems();
+function loadUserFavorites() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                const data = doc.data();
+                userFavorites = data && data.favorites ? data.favorites : {};
+                userLoaded = true;
+                tryRenderFavorites();
+            });
+        }
+    });
+}
+
+function tryRenderFavorites() {
+    if (stateLoaded && userLoaded) {
+        renderSavedItems(userFavorites.items || []);
+        renderSavedChampions(userFavorites.champions || []);
     }
 }
 
@@ -50,8 +68,14 @@ function selectWithDetails(name) {
     const data = findRecord(name);
 
     if (data) {
-        // Check if the item is already favorited
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        // Use Firestore favorites if logged in, else localStorage
+        let favorites;
+        const user = firebase.auth().currentUser;
+        if (user && window.userFavorites) {
+            favorites = window.userFavorites.items || [];
+        } else {
+            favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        }
         const isFavorited = favorites.includes(name);
         const favoritedClass = isFavorited ? 'favorited' : '';
 
@@ -103,26 +127,78 @@ function selectWithDetails(name) {
 }
 
 function showChampionDetails(championId) {
-    const result = document.querySelector('#detail');
     const champ = champions.find(c => c.id === championId);
+    const detailSection = document.getElementById('detail');
+
+    if (!detailSection) {
+        console.error('Error: #detail element not found in the DOM.');
+        return;
+    }
 
     if (champ) {
-        const html = `
-            <h2>${champ.name}</h2>
-            <p><strong>Title:</strong> ${champ.title}</p>
-            <p>${champ.blurb}</p>
-            <p><strong>Stats:</strong></p>
-            <ul>
-                <li>Attack: ${champ.info.attack}</li>
-                <li>Defense: ${champ.info.defense}</li>
-                <li>Magic: ${champ.info.magic}</li>
-                <li>Difficulty: ${champ.info.difficulty}</li>
-            </ul>
-        `;
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            alert("You need to be logged in to view favorites.");
+            return;
+        }
 
-        result.innerHTML = html;
+        // Fetch the user's current favorites from Firestore
+        firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+            let favoriteChampions = [];
+            if (doc.exists && doc.data().favorites) {
+                favoriteChampions = doc.data().favorites.champions || [];
+            }
+
+            const isFavorited = favoriteChampions.some(favChamp => favChamp.id === champ.id);
+            const favoritedClass = isFavorited ? 'favorited' : '';
+
+            const html = `
+                <div class="champion-details">
+                    <div class="ribbon">
+                        <span>${champ.name}</span>
+                        <span class="save-ribbon ${favoritedClass}" onclick="toggleFavoriteChampion('${champ.id}')">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </span>
+                    </div>
+                    <div class="champion-info">
+                        <p><strong>Title:</strong> ${champ.title}</p>
+                        <p><strong>Stats:</strong></p>
+                        <ul>
+                            <li>Attack: ${champ.info.attack}</li>
+                            <li>Defense: ${champ.info.defense}</li>
+                            <li>Magic: ${champ.info.magic}</li>
+                            <li>Difficulty: ${champ.info.difficulty}</li>
+                        </ul>
+                        <p><strong>Tags:</strong> ${champ.tags.join(', ')}</p>
+                        <p><strong>Partype:</strong> ${champ.partype}</p>
+                        <p><strong>Base Stats:</strong></p>
+                        <ul>
+                            <li>HP: ${champ.stats.hp}</li>
+                            <li>HP per Level: ${champ.stats.hpperlevel}</li>
+                            <li>MP: ${champ.stats.mp}</li>
+                            <li>MP per Level: ${champ.stats.mpperlevel}</li>
+                            <li>Move Speed: ${champ.stats.movespeed}</li>
+                            <li>Armor: ${champ.stats.armor}</li>
+                            <li>Armor per Level: ${champ.stats.armorperlevel}</li>
+                            <li>Attack Range: ${champ.stats.attackrange}</li>
+                            <li>Attack Damage: ${champ.stats.attackdamage}</li>
+                            <li>Attack Damage per Level: ${champ.stats.attackdamageperlevel}</li>
+                            <li>Attack Speed: ${champ.stats.attackspeed}</li>
+                            <li>Attack Speed per Level: ${champ.stats.attackspeedperlevel}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            detailSection.innerHTML = html;
+
+            // Scroll to the detail section
+            detailSection.scrollIntoView({ behavior: 'smooth' });
+        }).catch(error => {
+            console.error('Error fetching favorites:', error);
+        });
     } else {
-        result.innerHTML = '<p>Champion not found</p>';
+        console.error('Champion not found');
     }
 }
 
@@ -152,84 +228,123 @@ if (searchKeyInput) {
 }
 
 function saveItem(name) {
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+            let favorites = [];
+            let champions = [];
+            if (doc.exists && doc.data().favorites) {
+                favorites = doc.data().favorites.items || [];
+                champions = doc.data().favorites.champions || [];
+            }
+            const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);
 
-    if (!favorites.includes(name)) {
-        // Add to favorites
-        favorites.push(name);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        if (ribbon) ribbon.classList.add('favorited'); // Add the 'favorited' class
+            let isFavorited;
+            if (!favorites.includes(name)) {
+                favorites.push(name);
+                isFavorited = true;
+            } else {
+                favorites = favorites.filter(item => item !== name);
+                isFavorited = false;
+            }
+
+            // Update UI immediately
+            if (ribbon) {
+                ribbon.classList.toggle('favorited', isFavorited);
+            }
+
+            // Save to Firestore
+            saveUserFavorites(favorites, champions);
+
+            // Update in-memory
+            if (!window.userFavorites) window.userFavorites = {};
+            window.userFavorites.items = favorites;
+            window.userFavorites.champions = champions;
+
+            // Optionally re-render details if you want to update other info
+            // selectWithDetails(name);
+        });
     } else {
-        // Remove from favorites
-        favorites = favorites.filter(item => item !== name);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        if (ribbon) ribbon.classList.remove('favorited'); // Remove the 'favorited' class
-    }
-
-    console.log('Favorites after saving:', favorites);
-
-    // Re-render the item details to reflect the updated state
-    selectWithDetails(name);
-}
-
-function renderSavedItems() {
-    const savedItemsContainer = document.querySelector('#saved-items');
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    console.log('Favorites:', favorites); // Debugging: Check the favorites array
-
-    if (!state || state.length === 0) {
-        console.error('Error: State is empty. Items cannot be rendered.');
-        savedItemsContainer.innerHTML = '<p>Unable to load saved items. Please try again later.</p>';
-        return;
-    }
-
-    if (favorites.length === 0) {
-        savedItemsContainer.innerHTML = '<p>No saved items found.</p>';
-        return;
-    }
-
-    let html = '';
-    for (const name of favorites) {
-        const item = state.find(item => item.name.trim().toLowerCase() === name.trim().toLowerCase());
-        if (item) {
-            // Escape single quotes in the item name
-            const safeName = name.replace(/'/g, "\\'");
-            html += `
-                <div class="saved-item">
-                    <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}" class="item-image">
-                    <p class="item-name">${item.name}</p>
-                    <img src="images/x_button.png" alt="Remove" class="remove-button" onclick="removeFavorite('${safeName}')">
-                </div>
-            `;
+        // Fallback to localStorage for guests (optional)
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);
+        let isFavorited;
+        if (!favorites.includes(name)) {
+            favorites.push(name);
+            isFavorited = true;
+        } else {
+            favorites = favorites.filter(item => item !== name);
+            isFavorited = false;
         }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        if (ribbon) ribbon.classList.toggle('favorited', isFavorited);
+        // selectWithDetails(name);
     }
-
-    savedItemsContainer.innerHTML = html;
 }
 
 function removeFavorite(name) {
-    console.log('Name passed to removeFavorite:', name); // Debugging: Check the name passed
+    const user = firebase.auth().currentUser;
+    if (user) {
+        let favorites = (window.userFavorites && window.userFavorites.items) ? [...window.userFavorites.items] : [];
+        favorites = favorites.filter(item => item !== name);
 
-    // Unescape single quotes in the name
-    const unescapedName = name.replace(/\\'/g, "'");
-    console.log('Unescaped name:', unescapedName); // Debugging: Check the unescaped name
+        const champions = (window.userFavorites && window.userFavorites.champions) ? window.userFavorites.champions : [];
+        saveUserFavorites(favorites, champions);
 
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    console.log('Favorites before removing:', favorites); // Debugging: Check the favorites array before removing
+        if (!window.userFavorites) window.userFavorites = {};
+        window.userFavorites.items = favorites;
 
-    favorites = favorites.filter(item => item !== unescapedName); // Remove the item
-    console.log('Favorites after removing:', favorites); // Debugging: Check the favorites array after removing
-
-    localStorage.setItem('favorites', JSON.stringify(favorites)); // Update localStorage
-
-    // Re-render the saved items list
-    renderSavedItems();
+        renderSavedItems(favorites);
+    } else {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favorites = favorites.filter(item => item !== name);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        renderSavedItems(favorites);
+    }
 }
 
-function renderSavedChampions() {
+function removeFavoriteItem(itemName) {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        // Fetch the user's current favorites from Firestore
+        firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+            let favoriteItems = [];
+            if (doc.exists && doc.data().favorites) {
+                favoriteItems = doc.data().favorites.items || [];
+            }
+
+            // Remove the item from the favorites
+            favoriteItems = favoriteItems.filter(favItem => favItem !== itemName);
+
+            // Save the updated favorites back to Firestore
+            firebase.firestore().collection('users').doc(user.uid).set({
+                favorites: {
+                    items: favoriteItems
+                }
+            }, { merge: true });
+
+            console.log(`Removed item "${itemName}" from favorites.`);
+
+            // Re-render the saved items list
+            renderSavedItems(favoriteItems);
+        }).catch(error => {
+            console.error('Error removing favorite item:', error);
+        });
+    } else {
+        // Fallback for guests using localStorage
+        const favoriteItems = JSON.parse(localStorage.getItem('favorites')) || [];
+        const updatedFavorites = favoriteItems.filter(favItem => favItem !== itemName);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+        console.log(`Removed item "${itemName}" from favorites.`);
+
+        // Re-render the saved items list
+        renderSavedItems(updatedFavorites);
+    }
+}
+
+function renderSavedChampions(favoriteChampions = []) {
     const savedChampionsContainer = document.querySelector('#saved-champions');
-    const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
     console.log('Favorite Champions:', favoriteChampions); // Debugging: Check the favorites array
 
     if (!savedChampionsContainer) {
@@ -257,14 +372,162 @@ function renderSavedChampions() {
 }
 
 function removeFavoriteChampion(championId) {
-    const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
-    const updatedFavorites = favoriteChampions.filter(favChamp => favChamp.id !== championId);
-    localStorage.setItem('favoriteChampions', JSON.stringify(updatedFavorites));
+    const user = firebase.auth().currentUser;
+    if (user) {
+        // Fetch the user's current favorites from Firestore
+        firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+            let favoriteChampions = [];
+            if (doc.exists && doc.data().favorites) {
+                favoriteChampions = doc.data().favorites.champions || [];
+            }
 
-    console.log(`Removed champion with ID ${championId} from favorites.`);
+            // Remove the champion from the favorites
+            favoriteChampions = favoriteChampions.filter(favChamp => favChamp.id !== championId);
 
-    // Re-render the saved champions list
-    renderSavedChampions();
+            // Save the updated favorites back to Firestore
+            firebase.firestore().collection('users').doc(user.uid).set({
+                favorites: {
+                    champions: favoriteChampions
+                }
+            }, { merge: true });
+
+            console.log(`Removed champion with ID ${championId} from favorites.`);
+
+            // Re-render the saved champions list
+            renderSavedChampions(favoriteChampions);
+        }).catch(error => {
+            console.error('Error removing favorite champion:', error);
+        });
+    } else {
+        // Fallback for guests using localStorage
+        const favoriteChampions = JSON.parse(localStorage.getItem('favoriteChampions')) || [];
+        const updatedFavorites = favoriteChampions.filter(favChamp => favChamp.id !== championId);
+        localStorage.setItem('favoriteChampions', JSON.stringify(updatedFavorites));
+
+        console.log(`Removed champion with ID ${championId} from favorites.`);
+
+        // Re-render the saved champions list
+        renderSavedChampions(updatedFavorites);
+    }
+}
+
+// Save favorites for the logged-in user
+function saveUserFavorites(itemsArray, championsArray) {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    firebase.firestore().collection('users').doc(user.uid)
+        .set({ favorites: { items: itemsArray, champions: championsArray } }, { merge: true });
+}
+
+// Call both functions
+document.addEventListener('DOMContentLoaded', function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            loadUserFavorites();
+        }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        const logoutNav = document.getElementById('logout-nav');
+        if (logoutNav) {
+            if (user) {
+                logoutNav.innerHTML = '<a href="#" id="logout-btn">Logout</a>';
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(function() {
+                        window.location.href = "login.html";
+                    });
+                });
+            } else {
+                logoutNav.innerHTML = '<a href="login.html">Login</a>';
+            }
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+            alert("You need to be logged in to use this page.");
+            window.location.href = "login.html";
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const removeAllChampionsBtn = document.getElementById('remove-all-champions');
+    if (removeAllChampionsBtn) {
+        removeAllChampionsBtn.addEventListener('click', function () {
+            if (confirm('Are you sure you want to remove all favorited champions?')) {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    // Clear all favorited champions in Firestore
+                    firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                        if (doc.exists && doc.data().favorites) {
+                            const favoriteItems = doc.data().favorites.items || [];
+                            // Save only the items, clearing the champions
+                            firebase.firestore().collection('users').doc(user.uid).set({
+                                favorites: {
+                                    items: favoriteItems,
+                                    champions: [] // Clear all champions
+                                }
+                            }, { merge: true }).then(() => {
+                                console.log('All favorited champions removed.');
+                                renderSavedChampions([]); // Re-render with an empty list
+                            }).catch(error => {
+                                console.error('Error removing all favorited champions:', error);
+                            });
+                        }
+                    }).catch(error => {
+                        console.error('Error fetching user favorites:', error);
+                    });
+                } else {
+                    // Fallback for guests using localStorage
+                    localStorage.setItem('favoriteChampions', JSON.stringify([]));
+                    console.log('All favorited champions removed for guest user.');
+                    renderSavedChampions([]); // Re-render with an empty list
+                }
+            }
+        });
+    }
+});
+
+function renderSavedItems(favorites = []) {
+    const savedItemsContainer = document.querySelector('#saved-items');
+    console.log('Favorites:', favorites); // Debugging: Check the favorites array
+
+    if (!state || state.length === 0) {
+        console.error('Error: State is empty. Items cannot be rendered.');
+        savedItemsContainer.innerHTML = '<p>Unable to load saved items. Please try again later.</p>';
+        return;
+    }
+
+    if (favorites.length === 0) {
+        savedItemsContainer.innerHTML = '<p>No saved items found.</p>';
+        return;
+    }
+
+    let html = '';
+    for (const name of favorites) {
+        const item = state.find(item => item.name.trim().toLowerCase() === name.trim().toLowerCase());
+        if (item) {
+            // Escape single quotes in the item name
+            const safeName = name.replace(/'/g, "\\'");
+            html += `
+                <div class="saved-item">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/15.7.1/img/item/${item.image.full}" alt="${item.name}" class="item-image">
+                    <p class="item-name">${item.name}</p>
+                    <img src="images/x_button.png" alt="Remove" class="remove-button" onclick="removeFavoriteItem('${safeName}')">
+                </div>
+            `;
+        }
+    }
+
+    savedItemsContainer.innerHTML = html;
 }
 
 getData();
+loadUserFavorites();

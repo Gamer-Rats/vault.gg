@@ -4,6 +4,24 @@ if (document.querySelector('#list')) {
     getData(); // Only call getData if #list exists
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists && doc.data().favorites) {
+                    window.userFavorites = doc.data().favorites;
+                } else {
+                    window.userFavorites = { items: [], champions: [] };
+                }
+            }).catch(error => {
+                console.error('Error fetching user favorites:', error);
+            });
+        } else {
+            window.userFavorites = null;
+        }
+    });
+});
+
 async function getData() {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/item.json`);
     const data = await response.json();
@@ -64,8 +82,16 @@ function selectWithDetails(name) {
     const data = findRecord(name);
 
     if (data) {
-        // Check if the item is already favorited
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        // Use Firestore favorites if logged in, else localStorage
+        let favorites;
+        const user = firebase.auth().currentUser;
+        if (user && window.userFavorites) {
+            favorites = window.userFavorites.items || [];
+        } else {
+            favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        }
+
+        // Check if the item is favorited
         const isFavorited = favorites.includes(name);
         const favoritedClass = isFavorited ? 'favorited' : '';
 
@@ -120,7 +146,6 @@ function selectWithDetails(name) {
     }
 }
 
-
 function search() {
     const searchKey = document.querySelector('#searchKey').value.trim().toUpperCase();
     const results = state.filter(rec => rec.name.toUpperCase().includes(searchKey));
@@ -146,35 +171,77 @@ if (searchKeyInput) {
     });
 }
 
-function saveItem(name) {
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const ribbon = document.querySelector(`.save-ribbon[data-name="${name}"]`);
-
-    if (!favorites.includes(name)) {
-        // Add to favorites
-        favorites.push(name);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        if (ribbon) ribbon.classList.add('favorited'); // Add the 'favorited' class
-    } else {
-        // Remove from favorites
-        favorites = favorites.filter(item => item !== name);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        if (ribbon) ribbon.classList.remove('favorited'); // Remove the 'favorited' class
+function saveItem(itemName) {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert("You need to be logged in to favorite items.");
+        return;
     }
 
-    console.log('Favorites after saving:', favorites);
+    const item = state.find(i => i.name === itemName);
+    if (!item) {
+        console.error('Item not found');
+        return;
+    }
 
-    // Re-render the item details to reflect the updated state
-    selectWithDetails(name);
+    // Fetch the user's current favorites from Firestore
+    firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+        let favoriteItems = [];
+        let favoriteChampions = [];
+        if (doc.exists && doc.data().favorites) {
+            favoriteItems = doc.data().favorites.items || [];
+            favoriteChampions = doc.data().favorites.champions || [];
+        }
+
+        // Check if the item is already favorited
+        const isFavorited = favoriteItems.some(favItem => favItem === itemName);
+
+        if (!isFavorited) {
+            // Add to favorites
+            favoriteItems.push(itemName);
+            console.log(`Added ${itemName} to favorites.`);
+
+            // Save the updated favorites back to Firestore
+            firebase.firestore().collection('users').doc(user.uid).set({
+                favorites: {
+                    items: favoriteItems,
+                    champions: favoriteChampions
+                }
+            }, { merge: true });
+
+            // Update the UI immediately
+            const ribbon = document.querySelector(`.save-ribbon[data-name="${itemName}"]`);
+            if (ribbon) {
+                ribbon.classList.add('favorited');
+            }
+        } else {
+            console.log(`${itemName} is already in favorites.`);
+        }
+    }).catch(error => {
+        console.error('Error updating favorites:', error);
+    });
 }
 
-function renderSavedItems() {
+function saveUserFavorites(itemsArray, championsArray) {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    firebase.firestore().collection('users').doc(user.uid)
+        .set({ favorites: { items: itemsArray, champions: championsArray } }, { merge: true });
+}
+
+function renderSavedItems(favorites = null) {
     const savedItemsContainer = document.querySelector('#saved-items');
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    console.log('Favorites:', favorites); // Debugging: Check the favorites array
+    // Use Firestore favorites if logged in, else localStorage
+    if (favorites === null) {
+        const user = firebase.auth().currentUser;
+        if (user && window.userFavorites) {
+            favorites = window.userFavorites.items || [];
+        } else {
+            favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        }
+    }
 
     if (!state || state.length === 0) {
-        console.error('Error: State is empty. Items cannot be rendered.');
         savedItemsContainer.innerHTML = '<p>Unable to load saved items. Please try again later.</p>';
         return;
     }
@@ -188,7 +255,6 @@ function renderSavedItems() {
     for (const name of favorites) {
         const item = state.find(item => item.name.trim().toLowerCase() === name.trim().toLowerCase());
         if (item) {
-            // Escape single quotes in the item name
             const safeName = name.replace(/'/g, "\\'");
             html += `
                 <div class="saved-item">
@@ -199,7 +265,6 @@ function renderSavedItems() {
             `;
         }
     }
-
     savedItemsContainer.innerHTML = html;
 }
 
