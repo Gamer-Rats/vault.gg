@@ -9,6 +9,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <!-- Firebase Auth -->
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
     <script>
       // Your Firebase config
       const firebaseConfig = {
@@ -19,6 +21,7 @@
       };
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
+      const firestore = firebase.firestore();
     </script>
 </head>
 <body>
@@ -41,8 +44,8 @@
         <div class="login-box">
             <h2>Login</h2>
             <form>
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+                <label for="email">Username</label>
+                <input type="text" id="email" placeholder="Enter your username" required>
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password" required>
                 <button type="submit">Login</button>
@@ -54,10 +57,31 @@
     <script>
     document.querySelector('.login-box form').addEventListener('submit', async function(event) {
         event.preventDefault();
-        const email = document.getElementById('email').value.trim();
+        const username = document.getElementById('email').value.trim(); // Use the username input field
         const password = document.getElementById('password').value;
 
         try {
+            // Query Firestore to find the email associated with the username
+            const usersRef = firebase.firestore().collection('users');
+            const querySnapshot = await usersRef.where('username', '==', username).get();
+
+            if (querySnapshot.empty) {
+                alert('Username not found. Please check your username or sign up.');
+                return;
+            }
+
+            // Get the email associated with the username
+            let email = null;
+            querySnapshot.forEach(doc => {
+                email = doc.data().email;
+            });
+
+            if (!email) {
+                alert('Error retrieving email for the provided username.');
+                return;
+            }
+
+            // Log in with the retrieved email and password
             await firebase.auth().signInWithEmailAndPassword(email, password);
             // Redirect to home or dashboard after successful login
             window.location.href = "index.html";
