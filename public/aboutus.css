@@ -166,3 +166,10 @@ footer {
     position: fixed;
     bottom: 0;
 }
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
